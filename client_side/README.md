@@ -10,4 +10,5 @@
 - only modify/ set the theme of the app in material theme setting
 - please always reusability ,  maintainability , and readability.Do no write codes that you don't even wanna read again
 - always think of the scalability
+- keep the ui responsive as well
 
