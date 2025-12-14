@@ -35,12 +35,9 @@ func main() {
 		logger: logger,
 	}
 
-	max := http.NewServeMux()
-	max.HandleFunc("/v1/greet", app.greet)
-
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      max,
+		Handler:      app.routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
