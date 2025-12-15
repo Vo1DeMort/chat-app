@@ -3,13 +3,25 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"github.com/Vo1DeMort/chat-app/serverSide/internal/data"
 )
 
-// TODO: gonna try a todo api first , then add one by  one features
+func (app *application) docs(w http.ResponseWriter, r *http.Request) {
+	/// just messing with the golang
+	app.writeJson(w, http.StatusOK, map[string]string{
+		"doc": "endpoint for api doc",
+	}, nil)
+}
+
 func (app *application) getTodos(w http.ResponseWriter, r *http.Request) {
-	data := map[string]string{
-		"hello": "there",
-		"info":  "there are some todos",
+	data := data.Todos{
+		Id:      1,
+		Created: time.Now(),
+		Updated: time.Now(),
+		Title:   "first todo",
+		Type:    "testing",
 	}
 
 	err := app.writeJson(w, http.StatusOK, data, nil)
@@ -20,6 +32,7 @@ func (app *application) getTodos(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getTodo(w http.ResponseWriter, r *http.Request) {
+	//WARNING:  this should work with an id
 	fmt.Fprintf(w, "get todo ")
 }
 func (app *application) postTodo(w http.ResponseWriter, r *http.Request) {

@@ -12,6 +12,7 @@ func (app *application) writeJson(w http.ResponseWriter, status int, data any, h
 		return err
 	}
 
+	//NOTE: this might not be necessary for frontend program
 	js = append(js, '\n')
 
 	// for k, v := range headers {
