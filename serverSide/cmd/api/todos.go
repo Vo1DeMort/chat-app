@@ -10,9 +10,12 @@ import (
 
 func (app *application) docs(w http.ResponseWriter, r *http.Request) {
 	/// just messing with the golang
-	app.writeJson(w, http.StatusOK, map[string]string{
+	err := app.writeJson(w, http.StatusOK, envelope{
 		"doc": "endpoint for api doc",
 	}, nil)
+	if err != nil {
+		app.logger.Error(err.Error())
+	}
 }
 
 func (app *application) getTodos(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +27,9 @@ func (app *application) getTodos(w http.ResponseWriter, r *http.Request) {
 		Type:    "testing",
 	}
 
-	err := app.writeJson(w, http.StatusOK, data, nil)
+	err := app.writeJson(w, http.StatusOK, envelope{
+		"todos": data,
+	}, nil)
 	if err != nil {
 		app.logger.Error(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
