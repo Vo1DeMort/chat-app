@@ -15,3 +15,4 @@
 - [ ] implement file transfer
 - [ ] http routes for user registrations, logins
 - [ ] might do feature like excalidraw
+- [ ] register user , then admin user or user who has athority approve or denied it

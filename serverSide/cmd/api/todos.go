@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -40,8 +41,25 @@ func (app *application) getTodo(w http.ResponseWriter, r *http.Request) {
 	//WARNING:  this should work with an id
 	fmt.Fprintf(w, "get todo ")
 }
+
+// / will do json paring ,validation
 func (app *application) postTodo(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "post todos ")
+
+	var input struct {
+		// these fields must be in capital so that encode/json can see
+		Title string `json:"title"`
+		Type  string `json:"type"`
+	}
+
+	// must use non nil pointer value for Decode
+	// otherwise json.invalid unmarsha error
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	fmt.Fprintf(w, "%v\n", input)
 }
 func (app *application) deleteTodo(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "delete todos ")
