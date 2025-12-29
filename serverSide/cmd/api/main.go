@@ -46,6 +46,7 @@ func main() {
 
 	logger.Info("server started", "addr", srv.Addr, "env", cfg.env)
 
+	// TODO: need graceful shutdown , which listen signal , with go routine
 	err := srv.ListenAndServe()
 	logger.Error(err.Error())
 	os.Exit(1)
