@@ -1,6 +1,11 @@
 package main
 
-import "github.com/jackc/pgx/v5"
+import (
+	"net/http"
+	"time"
+
+	"github.com/jackc/pgx/v5"
+)
 
 type application struct {
 	config config
@@ -17,5 +22,17 @@ type dbConfig struct {
 }
 
 func (app *application) runServer() error {
-	//TODO this is where i left
+	srv := &http.Server{
+		Addr:         "",
+		Handler:      app.routes(),
+		WriteTimeout: time.Second * 10,
+		ReadTimeout:  time.Second * 5,
+	}
+
+	// TODO: graceful shut down
+	err := srv.ListenAndServe()
+	if err != nil {
+		return err
+	}
+	return nil
 }
