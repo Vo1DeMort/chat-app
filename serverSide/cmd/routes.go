@@ -15,6 +15,8 @@ func (app *application) routes() http.Handler {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer) // recover from crashes
 
+	// TODO:
+	// auth
 	// user
 
 	return r
