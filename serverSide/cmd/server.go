@@ -10,13 +10,12 @@ import (
 	"sync"
 	"syscall"
 	"time"
-
-	"github.com/jackc/pgx/v5"
+	//"github.com/jackc/pgx/v5"
 )
 
 type application struct {
 	config config
-	db     *pgx.Conn
+	//db     *pgx.Conn
 }
 
 type config struct {
@@ -33,14 +32,13 @@ var wg sync.WaitGroup
 
 func (app *application) runServer() error {
 	srv := &http.Server{
-		Addr:         "",
+		Addr:         ":8000",
 		Handler:      app.routes(),
 		WriteTimeout: time.Second * 10,
 		ReadTimeout:  time.Second * 5,
 	}
 
-	//to recieve error from graceful shutdown if any
-	gsdError := make(chan error)
+	shutdownError := make(chan error)
 
 	go func() {
 		// recieves os signal for graceful shutdown
@@ -63,22 +61,25 @@ func (app *application) runServer() error {
 
 		err := srv.Shutdown(ctx)
 		if err != nil {
-			gsdError <- err
+			log.Println("Server graceful shutdonw erro :", err)
+			shutdownError <- err
 		}
 
 		log.Println("Completing Background Tasks")
 		wg.Wait()
-		gsdError <- nil
-
+		// without this err ,wait group does not work
+		// NOTE dunno why yet
+		shutdownError <- nil
 	}()
 
+	log.Println("Server has started")
+
 	err := srv.ListenAndServe()
-	if err != nil {
+	if err != nil && err != http.ErrServerClosed {
 		return err
 	}
 
-	//need to learn the connection between 2 goroutin
-	err = <-gsdError
+	err = <-shutdownError
 	if err != nil {
 		return err
 	}

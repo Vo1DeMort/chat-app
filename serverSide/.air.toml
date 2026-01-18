@@ -1,0 +1,5 @@
+[build]
+cmd = "mkdir -p tmp && go build -o ./tmp/main ./cmd"
+entrypoint = ["./tmp/main"]
+send_interrupt = true
+
